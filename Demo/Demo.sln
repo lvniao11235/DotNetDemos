@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofac.Demo", "Autofac.Demo\Autofac.Demo.csproj", "{3F74F518-D36A-42DC-ADF6-D63A7DDED17F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Autofac", "Autofac", "{FA235A11-C207-4F40-B2AC-FB73341B8250}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3F74F518-D36A-42DC-ADF6-D63A7DDED17F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F74F518-D36A-42DC-ADF6-D63A7DDED17F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F74F518-D36A-42DC-ADF6-D63A7DDED17F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F74F518-D36A-42DC-ADF6-D63A7DDED17F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3F74F518-D36A-42DC-ADF6-D63A7DDED17F} = {FA235A11-C207-4F40-B2AC-FB73341B8250}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {05CB73AC-3F49-450B-99B7-E85DA1465F82}
+	EndGlobalSection
+EndGlobal
