@@ -1,0 +1,10 @@
+E:\MyProject\C#\DotNetDemos\Demo\Autofac.Demo\bin\Debug\Autofac.Demo.exe.config
+E:\MyProject\C#\DotNetDemos\Demo\Autofac.Demo\bin\Debug\Autofac.Demo.exe
+E:\MyProject\C#\DotNetDemos\Demo\Autofac.Demo\bin\Debug\Autofac.Demo.pdb
+E:\MyProject\C#\DotNetDemos\Demo\Autofac.Demo\bin\Debug\Autofac.dll
+E:\MyProject\C#\DotNetDemos\Demo\Autofac.Demo\bin\Debug\Autofac.xml
+E:\MyProject\C#\DotNetDemos\Demo\Autofac.Demo\obj\Debug\Autofac.Demo.csprojAssemblyReference.cache
+E:\MyProject\C#\DotNetDemos\Demo\Autofac.Demo\obj\Debug\Autofac.Demo.csproj.CoreCompileInputs.cache
+E:\MyProject\C#\DotNetDemos\Demo\Autofac.Demo\obj\Debug\Autofac.Demo.csproj.CopyComplete
+E:\MyProject\C#\DotNetDemos\Demo\Autofac.Demo\obj\Debug\Autofac.Demo.exe
+E:\MyProject\C#\DotNetDemos\Demo\Autofac.Demo\obj\Debug\Autofac.Demo.pdb

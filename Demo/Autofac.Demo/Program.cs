@@ -21,8 +21,9 @@ namespace Autofac.Demo
     {
         static void Main(string[] args)
         {
-            BaseUsage();
-        }
+			UseSingleton();
+
+		}
 
         public static void BaseUsage()
         {
@@ -41,5 +42,83 @@ namespace Autofac.Demo
                 Console.WriteLine(calc.Add(1, 2));
             }
         }
+
+		public static void UseSpecifyConstructor()
+		{
+			ContainerBuilder builder = new ContainerBuilder();
+			builder.RegisterType<Student>().UsingConstructor(typeof(string));
+			IContainer container = builder.Build();
+			using (var scope = container.BeginLifetimeScope())
+			{
+				Student calc = scope.Resolve<Student>(new NamedParameter("name", "aa"));
+				Console.WriteLine(calc.Name);
+			}
+		}
+
+		public static void UseMutiplyImplement()
+		{
+			ContainerBuilder builder = new ContainerBuilder();
+			builder.Register<CreditCard>((c, p) =>
+			{
+				var type = p.Named<int>("type");
+				if (type == 1)
+				{
+					return new GoldCard();
+				}
+				else
+				{
+					return new StandardCard();
+				}
+			});
+			IContainer container = builder.Build();
+			using (var scope = container.BeginLifetimeScope())
+			{
+				CreditCard CreditCard = scope.Resolve<CreditCard>(new NamedParameter("type", 2));
+				if(CreditCard != null)
+				{
+
+				}
+			}
+		}
+
+		public static void UsePropertyInject()
+		{
+			ContainerBuilder builder = new ContainerBuilder();
+			builder.RegisterType<Student>().SingleInstance().WithProperty("Name", "1235");
+			IContainer container = builder.Build();
+			using (var scope = container.BeginLifetimeScope())
+			{
+				for(int i=0; i<10; i++)
+				{
+					Student stu = scope.Resolve<Student>();
+					Student stu1 = scope.Resolve<Student>();
+					Console.WriteLine(stu.Name);
+				}
+				
+			}
+			Console.WriteLine("end");
+		}
+
+		public static void UseSingleton()
+		{
+			ContainerBuilder builder = new ContainerBuilder();
+			builder.RegisterType<Student>().AsSelf().As<IStartable>().SingleInstance();
+			IContainer container = builder.Build();
+		}
     }
+
+	public interface CreditCard
+	{
+
+	}
+
+	public class GoldCard : CreditCard
+	{
+
+	}
+
+	public class StandardCard: CreditCard
+	{
+
+	}
 }

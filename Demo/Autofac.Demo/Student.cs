@@ -11,17 +11,40 @@ namespace Autofac.Demo
         int Add(int a, int b);
     }
 
-    public class Student : IStudent
+    public class Student : IStudent, IDisposable, IStartable
     {
+		public static int count = 0;
+
+		public void Dispose()
+		{
+		}
+		public string Name { get; set; }
+
         public ICalculator Calculator { get; set; }
 
-        public Student(ICalculator calculator)
+		public Student()
+		{
+			count++;
+		}
+
+		public Student(ICalculator calculator)
         {
             this.Calculator = calculator;
         }
-        public int Add(int a, int b)
+
+		public Student(string name)
+		{
+			this.Name = name;
+		}
+
+		public int Add(int a, int b)
         {
             return Calculator.Add(a, b);
         }
-    }
+
+		public void Start()
+		{
+			
+		}
+	}
 }
