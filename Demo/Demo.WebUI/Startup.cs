@@ -13,6 +13,10 @@ using Microsoft.EntityFrameworkCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Demo.Repository;
+using Demo.WebUI.Controllers;
+using IdentityServer4;
+using IdentityServer4.AspNetIdentity;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Demo.WebUI
 {
@@ -38,14 +42,33 @@ namespace Demo.WebUI
 			});
 			string strConnection = Configuration["ConnectionStrings:DefaultConnection"];
 			services.AddDbContext<DemoContext>(options => options.UseSqlServer(strConnection));
+            
+            services.AddMvc().AddControllersAsServices();
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+            .AddCookie("Cookies")
+            .AddOpenIdConnect("oidc", options =>
+            {
+                options.SignInScheme = "Cookies";
+                options.Authority = "http://localhost:6457";
+                options.RequireHttpsMetadata = false;
+                options.ClientId = "mvc_implicit";
+                options.ResponseType = "id_token token";
+                options.SaveTokens = true;
+            });
 
-			ContainerBuilder builder = new ContainerBuilder();
+
+            ContainerBuilder builder = new ContainerBuilder();
 			builder.Populate(services);
 			builder.RegisterModule<Demo.Repository.RegisterModule>();
-			builder.RegisterModule<MainModule>();
-			return new AutofacServiceProvider(builder.Build());
+			builder.RegisterModule<Demo.WebUI.RegisterModule>();
+            this.ApplicationContainer = builder.Build();
+            return new AutofacServiceProvider(this.ApplicationContainer);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +88,9 @@ namespace Demo.WebUI
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
+            app.UseAuthentication();
+
+            SeedData.Seed(this.ApplicationContainer.Resolve<DemoContext>());
 
 			app.UseMvc(routes =>
 			{
