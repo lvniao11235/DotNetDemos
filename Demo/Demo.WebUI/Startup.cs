@@ -55,7 +55,7 @@ namespace Demo.WebUI
             .AddOpenIdConnect("oidc", options =>
             {
                 options.SignInScheme = "Cookies";
-                options.Authority = "http://localhost:6457";
+                options.Authority = "https://localhost:44393";
                 options.RequireHttpsMetadata = false;
                 options.ClientId = "mvc_implicit";
                 options.ResponseType = "id_token token";

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using AuthenticationCenter.Models;
+using IdentityServer4.Test;
+using Microsoft.AspNetCore.Authentication;
 
 namespace AuthenticationCenter.Controllers
 {
