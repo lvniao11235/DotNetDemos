@@ -10,60 +10,108 @@ using System.Security.Claims;
 
 namespace AuthenticationCenter
 {
-    public class Config
+    public static class Config
     {
-        public static IEnumerable<ApiResource> GetApiResources()
+        public static List<TestUser> GetUsers()
         {
-            return new List<ApiResource>
+            return new List<TestUser>
             {
-                new ApiResource("api", "My Api")
+                new TestUser
+                {
+                    SubjectId = "1",
+                    Username = "alice",
+                    Password = "password",
+
+                    Claims = new []
+                    {
+                        new Claim("name", "Alice"),
+                        new Claim("website", "https://alice.com")
+                    }
+                },
+                new TestUser
+                {
+                    SubjectId = "2",
+                    Username = "bob",
+                    Password = "password",
+
+                    Claims = new []
+                    {
+                        new Claim("name", "Bob"),
+                        new Claim("website", "https://bob.com")
+                    }
+                }
             };
         }
 
-        public static IEnumerable<Client> GetClients() => new List<Client>
+        public static IEnumerable<IdentityResource> GetIdentityResources()
         {
-            new Client
+            return new List<IdentityResource>
             {
-                ClientId = "mvc_implicit",
-                ClientName = "MVC Client",
-                AllowedGrantTypes = GrantTypes.Implicit,                //简化模式
-                RequireConsent = false,     //Consent是授权页面，这里我们不进行授权
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
+            };
+        }
 
-                //RedirectUris = { "http://localhost:1798/signin-oidc" },
-                //PostLogoutRedirectUris = { "http://localhost:1798/signout-callback-oidc" },
+        public static IEnumerable<ApiResource> GetApis()
+        {
+            return new List<ApiResource>
+            {
+                new ApiResource("api1", "My API")
+            };
+        }
 
-                //授权后可以访问的用户信息（OpenId Connect Scope）与Api（OAuth2.0 Scope）
-                AllowedScopes = new List<string>
+        public static IEnumerable<Client> GetClients()
+        {
+            return new List<Client>
+            {
+                new Client
                 {
-                    IdentityServerConstants.StandardScopes.OpenId,
-                    IdentityServerConstants.StandardScopes.Profile,
-                    IdentityServerConstants.StandardScopes.Email,
-                    "api"
+                    ClientId = "client",
+
+                    // no interactive user, use the clientid/secret for authentication
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+                    // secret for authentication
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+
+                    // scopes that client has access to
+                    AllowedScopes = { "api1" }
                 },
+                // resource owner password grant client
+                new Client
+                {
+                    ClientId = "ro.client",
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
 
-                //允许返回Access Token
-                AllowAccessTokensViaBrowser = true
-            }
-        };
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    AllowedScopes = { "api1" }
+                },
+                // OpenID Connect implicit flow client (MVC)
+                new Client
+                {
+                    ClientId = "mvc",
+                    ClientName = "MVC Client",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                
+                    // where to redirect to after login
+                    RedirectUris = { "https://localhost:44369/signin-oidc" },
 
-        public static IEnumerable<IdentityResource> GetIdentityResources() => new List<IdentityResource>
-        {
-            new IdentityResources.OpenId(),
-            new IdentityResources.Profile(),
-            new IdentityResources.Email()
-        };
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = { "https://localhost:44369/signout-callback-oidc" },
 
-        public static List<TestUser> GetTestUsers() => new List<TestUser>
-        {
-            new TestUser()
-            {
-                SubjectId="1",
-                Username="test",
-                Password="123456",
-                Claims = new List<Claim> {
-                    new Claim(JwtClaimTypes.Email, "test@163.com")
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile
+                    }
                 }
-            }
-        };
+            };
+        }
     }
 }

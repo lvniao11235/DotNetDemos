@@ -11,6 +11,11 @@
     <title>Login</title>
 </head>
 <body>
-    <h1>Login</h1>
+    <form method="post" action="/account/login">
+        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]"/>
+        Name:<input type="text" name="UserName"/><br/>
+        Pass:<input type="password" name="Password"/><br/>
+        <button type="submit">Login</button>
+    </form>
 </body>
 </html>

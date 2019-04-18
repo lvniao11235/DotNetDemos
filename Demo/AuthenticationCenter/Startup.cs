@@ -18,9 +18,12 @@ namespace AuthenticationCenter
     public class Startup
     {
         //https://www.cnblogs.com/color-wolf/p/9533098.html
-        public Startup(IConfiguration configuration)
+        public IHostingEnvironment Environment { get; }
+        
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
@@ -28,25 +31,21 @@ namespace AuthenticationCenter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
-            
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddIdentityServer(c =>
+            var builder = services.AddIdentityServer()
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiResources(Config.GetApis())
+                .AddInMemoryClients(Config.GetClients())
+                .AddTestUsers(Config.GetUsers());
+
+            if (Environment.IsDevelopment())
             {
-                c.UserInteraction.LoginUrl = "/account/login";
-            })
-            .AddDeveloperSigningCredential()
-            .AddInMemoryApiResources(Config.GetApiResources())
-            .AddInMemoryClients(Config.GetClients())
-            .AddInMemoryIdentityResources(Config.GetIdentityResources())
-            .AddTestUsers(Config.GetTestUsers());
+                builder.AddDeveloperSigningCredential();
+            }
+            else
+            {
+                throw new Exception("need to configure key material");
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
