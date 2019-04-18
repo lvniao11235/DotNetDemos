@@ -29,8 +29,8 @@ namespace AuthenticationCenter
                 AllowedGrantTypes = GrantTypes.Implicit,                //简化模式
                 RequireConsent = false,     //Consent是授权页面，这里我们不进行授权
 
-                RedirectUris = { "http://localhost:1798/signin-oidc" },
-                PostLogoutRedirectUris = { "http://localhost:1798/signout-callback-oidc" },
+                //RedirectUris = { "http://localhost:1798/signin-oidc" },
+                //PostLogoutRedirectUris = { "http://localhost:1798/signout-callback-oidc" },
 
                 //授权后可以访问的用户信息（OpenId Connect Scope）与Api（OAuth2.0 Scope）
                 AllowedScopes = new List<string>

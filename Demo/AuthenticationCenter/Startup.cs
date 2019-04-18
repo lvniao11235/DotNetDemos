@@ -35,6 +35,9 @@ namespace AuthenticationCenter
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddIdentityServer(c =>
             {
                 c.UserInteraction.LoginUrl = "/account/login";
@@ -44,8 +47,6 @@ namespace AuthenticationCenter
             .AddInMemoryClients(Config.GetClients())
             .AddInMemoryIdentityResources(Config.GetIdentityResources())
             .AddTestUsers(Config.GetTestUsers());
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
