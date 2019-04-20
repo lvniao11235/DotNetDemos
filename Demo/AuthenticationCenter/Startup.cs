@@ -12,6 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using IdentityServer4;
 using IdentityServer4.AspNetIdentity;
 using System.IdentityModel.Tokens.Jwt;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Demo.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthenticationCenter
 {
@@ -28,10 +32,15 @@ namespace AuthenticationCenter
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+		public IContainer ApplicationContainer { get; private set; }
+
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+			string strConnection = Configuration["ConnectionStrings:DefaultConnection"];
+			services.AddDbContext<DemoContext>(options => options.UseSqlServer(strConnection));
+			services.AddMvc().AddControllersAsServices()
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             var builder = services.AddIdentityServer()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApis())
@@ -46,7 +55,13 @@ namespace AuthenticationCenter
             {
                 throw new Exception("need to configure key material");
             }
-        }
+			ContainerBuilder containerBuilder = new ContainerBuilder();
+			containerBuilder.Populate(services);
+			containerBuilder.RegisterModule<Demo.Repository.RegisterModule>();
+			containerBuilder.RegisterModule<RegisterModule>();
+			this.ApplicationContainer = containerBuilder.Build();
+			return new AutofacServiceProvider(this.ApplicationContainer);
+		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

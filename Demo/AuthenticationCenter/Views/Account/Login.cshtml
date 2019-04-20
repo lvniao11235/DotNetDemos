@@ -11,9 +11,9 @@
     <title>Login</title>
 </head>
 <body>
-    <form method="post" action="/account/login">
-        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]"/>
-        Name:<input type="text" name="UserName"/><br/>
+    <form action="/account/login" method="post">
+        <input type="hidden" name="ReturnUrl" value="@ViewBag.returnUrl"/>
+        Name:<input type="text" name="Username"/><br/>
         Pass:<input type="password" name="Password"/><br/>
         <button type="submit">Login</button>
     </form>

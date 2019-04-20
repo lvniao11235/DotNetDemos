@@ -45,25 +45,25 @@ namespace Demo.WebUI
             
             services.AddMvc().AddControllersAsServices();
 
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+			JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "Cookies";
-                options.DefaultChallengeScheme = "oidc";
-            })
-                .AddCookie("Cookies")
-                .AddOpenIdConnect("oidc", options =>
-                {
-                    options.Authority = "https://localhost:44393";
-                    options.RequireHttpsMetadata = false;
+			services.AddAuthentication(options =>
+			{
+				options.DefaultScheme = "Cookies";
+				options.DefaultChallengeScheme = "oidc";
+			})
+				.AddCookie("Cookies")
+				.AddOpenIdConnect("oidc", options =>
+				{
+					options.Authority = "https://localhost:44393/";
+					options.RequireHttpsMetadata = false;
 
-                    options.ClientId = "mvc";
-                    options.SaveTokens = true;
-                });
+					options.ClientId = "mvc";
+					options.SaveTokens = true;
+				});
 
 
-            ContainerBuilder builder = new ContainerBuilder();
+			ContainerBuilder builder = new ContainerBuilder();
 			builder.Populate(services);
 			builder.RegisterModule<Demo.Repository.RegisterModule>();
 			builder.RegisterModule<Demo.WebUI.RegisterModule>();

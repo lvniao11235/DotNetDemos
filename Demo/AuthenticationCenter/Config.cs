@@ -94,24 +94,24 @@ namespace AuthenticationCenter
                 },
                 // OpenID Connect implicit flow client (MVC)
                 new Client
-                {
-                    ClientId = "mvc",
-                    ClientName = "MVC Client",
-                    AllowedGrantTypes = GrantTypes.Implicit,
+				{
+					ClientId = "mvc",
+					ClientName = "MVC Client",
+					AllowedGrantTypes = GrantTypes.Implicit,
                 
                     // where to redirect to after login
                     RedirectUris = { "https://localhost:44369/signin-oidc" },
 
                     // where to redirect to after logout
                     PostLogoutRedirectUris = { "https://localhost:44369/signout-callback-oidc" },
-
-                    AllowedScopes = new List<string>
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
-                    }
-                }
-            };
+					RequireConsent = false,
+					AllowedScopes = new List<string>
+					{
+						IdentityServerConstants.StandardScopes.OpenId,
+						IdentityServerConstants.StandardScopes.Profile
+					}
+				}
+			};
         }
     }
 }

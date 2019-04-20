@@ -12,5 +12,7 @@ namespace Demo.Repository
 		}
 
 		public DbSet<Customer> Customers { get; set; }
+
+		public DbSet<User> Users { get; set; }
 	}
 }
